@@ -19,5 +19,25 @@ public class UpdateProductValidator : AbstractValidator<Request.UpdateProduct>
 
         RuleFor(x => x.DiscountPercentage)
             .InclusiveBetween(0, 100);
+
+        // Optional fields: validated only when provided.
+        RuleFor(x => x.Rating)
+            .InclusiveBetween(0, 10);
+
+        RuleFor(x => x.Stock)
+            .InclusiveBetween(0, 100_000);
+
+        RuleFor(x => x.Brand)
+            .MaximumLength(500);
+
+        RuleFor(x => x.Category)
+            .MaximumLength(500);
+
+        RuleFor(x => x.Thumbnail)
+            .MustBeAbsoluteUrl()
+            .When(x => x.Thumbnail is not null);
+
+        RuleForEach(x => x.Images)
+            .MustBeAbsoluteUrl();
     }
 }

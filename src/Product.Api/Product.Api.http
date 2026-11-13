@@ -12,7 +12,16 @@ Content-Type: application/json
   "title": "Sample product",
   "description": "A sample product",
   "price": 10.0,
-  "discountPercentage": 5
+  "discountPercentage": 5,
+  "rating": 4.69,
+  "stock": 94,
+  "brand": "Apple",
+  "category": "smartphones",
+  "thumbnail": "https://dummyjson.com/image/i/products/1/thumbnail.jpg",
+  "images": [
+    "https://dummyjson.com/image/i/products/1/1.jpg",
+    "https://dummyjson.com/image/i/products/1/2.jpg"
+  ]
 }
 
 ###
@@ -24,7 +33,15 @@ Content-Type: application/json
   "title": "Updated product",
   "description": "An updated product",
   "price": 12.5,
-  "discountPercentage": 10
+  "discountPercentage": 10,
+  "rating": 4.44,
+  "stock": 34,
+  "brand": "Apple",
+  "category": "smartphones",
+  "thumbnail": "https://dummyjson.com/image/i/products/2/thumbnail.jpg",
+  "images": [
+    "https://dummyjson.com/image/i/products/2/1.jpg"
+  ]
 }
 
 ###
