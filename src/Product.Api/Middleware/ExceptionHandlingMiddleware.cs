@@ -34,7 +34,8 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                 var errors = validationException.Errors
                     .GroupBy(e => e.PropertyName)
                     .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).ToArray());
-                logger.LogWarning("Validation failed for {Path}: {@Errors}", context.Request.Path, errors);
+                logger.LogWarning("Validation failed for {Path}: {Errors}", context.Request.Path,
+                    string.Join("; ", validationException.Errors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}")));
                 result = Results.ValidationProblem(errors, extensions: extensions);
                 break;
 

@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Http.HttpResults;
+using Product.Api.Features.Product.Services;
 using Request = Product.Api.Features.Product.Models.Request;
-using Response = Product.Api.Features.Product.Models.Response;
 
 namespace Product.Api.Features.Product;
 
@@ -10,13 +9,13 @@ public static class Endpoints
     {
         var group = app.MapGroup("product").WithTags("Product");
 
-        group.MapGet("list", () =>
-            TypedResults.Ok());
+        group.MapGet("list", async (ProductService productService) =>
+            TypedResults.Ok(await productService.GetProducts()));
 
-        group.MapPost("add", (Request.AddProduct request) =>
-            TypedResults.Ok());
+        group.MapPost("add", async (Request.AddProduct request, ProductService productService) =>
+            TypedResults.Ok(await productService.AddProduct(request)));
 
-        group.MapPost("update", (Request.UpdateProduct request) =>
-            TypedResults.Ok());
+        group.MapPost("update", async (Request.UpdateProduct request, ProductService productService) =>
+            await productService.UpdateProduct(request));
     }
 }
