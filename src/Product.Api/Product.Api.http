@@ -4,3 +4,27 @@ GET {{Product.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+POST {{Product.Api_HostAddress}}/product/add
+Content-Type: application/json
+
+{
+  "title": "Sample product",
+  "description": "A sample product",
+  "price": 10.0,
+  "discountPercentage": 5
+}
+
+###
+
+POST {{Product.Api_HostAddress}}/product/update
+Content-Type: application/json
+
+{
+  "title": "Updated product",
+  "description": "An updated product",
+  "price": 12.5,
+  "discountPercentage": 10
+}
+
+###
