@@ -11,7 +11,8 @@ public class UpdateProductValidator : AbstractValidator<Request.UpdateProduct>
 
         RuleFor(x => x.Title)
             .NotEmpty()
-            .MinimumLength(2);
+            .MinimumLength(2)
+            .MaximumLength(100);
 
         RuleFor(x => x.Description)
             .MaximumLength(100);
