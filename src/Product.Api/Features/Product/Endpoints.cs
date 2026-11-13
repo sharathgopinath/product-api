@@ -4,13 +4,13 @@ using Request = Product.Api.Features.Product.Models.Request;
 namespace Product.Api.Features.Product;
 
 /// <summary>
-/// Maps the product endpoints under the authorized <c>/product</c> route group.
+/// Maps the product endpoints under the <c>/product</c> route group. Reads are anonymous; add and update require Basic auth.
 /// </summary>
 public static class Endpoints
 {
     public static void MapProductEndpoints(this WebApplication app)
     {
-        var group = app.MapGroup("product").WithTags("Product").RequireAuthorization();
+        var group = app.MapGroup("product").WithTags("Product");
 
         group.MapGet("list", async ([AsParameters] Request.GetProducts request, ProductService productService) =>
             TypedResults.Ok(await productService.GetProducts(request)));
@@ -19,12 +19,14 @@ public static class Endpoints
             TypedResults.Ok(await productService.GetProduct(request)));
 
         group.MapPost("add", async (Request.AddProduct request, ProductService productService) =>
-            TypedResults.Ok(await productService.AddProduct(request)));
+            TypedResults.Ok(await productService.AddProduct(request)))
+            .RequireAuthorization();
 
         group.MapPost("update", async (Request.UpdateProduct request, ProductService productService) =>
         {
             await productService.UpdateProduct(request);
             return TypedResults.NoContent();
-        });
+        })
+        .RequireAuthorization();
     }
 }

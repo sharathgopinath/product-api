@@ -54,10 +54,13 @@ public class ProductService(
     /// </summary>
     /// <param name="request">The product to add, including its id.</param>
     /// <returns>The id of the added product.</returns>
-    /// <exception cref="ConflictException">A product with the id already exists.</exception>
+    /// <exception cref="ConflictException">A product with the id, or with the same title and brand, already exists.</exception>
     public async Task<int> AddProduct(Request.AddProduct request)
     {
         await addProductValidator.ValidateAndThrowAsync(request);
+
+        if (await productRepository.ExistsByTitleAndBrand(request.Title, request.Brand))
+            throw DuplicateTitleAndBrand(request.Title, request.Brand);
 
         if (!await productRepository.AddProduct(request.MapToData()))
             throw new ConflictException($"Product with id {request.Id} already exists.");
@@ -70,11 +73,21 @@ public class ProductService(
     /// </summary>
     /// <param name="request">The full product to save.</param>
     /// <exception cref="NotFoundException">No product has the id.</exception>
+    /// <exception cref="ConflictException">Another product has the same title and brand.</exception>
     public async Task UpdateProduct(Request.UpdateProduct request)
     {
         await updateProductValidator.ValidateAndThrowAsync(request);
 
+        _ = await productRepository.GetProduct(request.Id)
+            ?? throw new NotFoundException($"Product with id {request.Id} was not found.");
+
+        if (await productRepository.ExistsByTitleAndBrand(request.Title, request.Brand, excludeId: request.Id))
+            throw DuplicateTitleAndBrand(request.Title, request.Brand);
+
         if (!await productRepository.UpdateProduct(request.MapToData()))
             throw new NotFoundException($"Product with id {request.Id} was not found.");
     }
+
+    private static ConflictException DuplicateTitleAndBrand(string title, string? brand) =>
+        new($"A product with title '{title}' and brand '{brand}' already exists.");
 }

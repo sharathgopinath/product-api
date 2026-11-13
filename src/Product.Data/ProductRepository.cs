@@ -41,6 +41,23 @@ public class ProductRepository
     public Task<Models.Product?> GetProduct(int id) =>
         Task.FromResult(_products.FirstOrDefault(p => p.Id == id));
 
+    /// <summary>
+    /// Returns true if a product other than <paramref name="excludeId"/> has the same title and brand.
+    /// Comparison is case-insensitive and ignores surrounding whitespace; a null brand equals an empty one.
+    /// </summary>
+    public Task<bool> ExistsByTitleAndBrand(string title, string? brand, int? excludeId = null)
+    {
+        var normalizedTitle = title.Trim();
+        var normalizedBrand = (brand ?? string.Empty).Trim();
+
+        var exists = _products.Any(p =>
+            p.Id != excludeId
+            && string.Equals(p.Title.Trim(), normalizedTitle, StringComparison.OrdinalIgnoreCase)
+            && string.Equals((p.Brand ?? string.Empty).Trim(), normalizedBrand, StringComparison.OrdinalIgnoreCase));
+
+        return Task.FromResult(exists);
+    }
+
     /// <summary>Adds a product with the caller-supplied id. Returns false if the id is already taken.</summary>
     public Task<bool> AddProduct(Models.Product product)
     {
