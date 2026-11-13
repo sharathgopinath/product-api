@@ -15,6 +15,11 @@ public class ProductService(
     IValidator<Request.GetProduct> getProductValidator,
     ProductRepository productRepository)
 {
+    /// <summary>
+    /// Gets a page of products.
+    /// </summary>
+    /// <param name="request">Paging parameters.</param>
+    /// <returns>The page of products and the total count.</returns>
     public async Task<Response.GetProducts> GetProducts(Request.GetProducts request)
     {
         await getProductsValidator.ValidateAndThrowAsync(request);
@@ -28,6 +33,12 @@ public class ProductService(
         };
     }
 
+    /// <summary>
+    /// Gets a product by id.
+    /// </summary>
+    /// <param name="request">The product id.</param>
+    /// <returns>The product.</returns>
+    /// <exception cref="NotFoundException">No product has the id.</exception>
     public async Task<Response.Product> GetProduct(Request.GetProduct request)
     {
         await getProductValidator.ValidateAndThrowAsync(request);
@@ -38,6 +49,12 @@ public class ProductService(
         return product.MapToResponse();
     }
 
+    /// <summary>
+    /// Adds a new product.
+    /// </summary>
+    /// <param name="request">The product to add, including its id.</param>
+    /// <returns>The id of the added product.</returns>
+    /// <exception cref="ConflictException">A product with the id already exists.</exception>
     public async Task<int> AddProduct(Request.AddProduct request)
     {
         await addProductValidator.ValidateAndThrowAsync(request);
@@ -48,6 +65,11 @@ public class ProductService(
         return request.Id;
     }
 
+    /// <summary>
+    /// Replaces an existing product.
+    /// </summary>
+    /// <param name="request">The full product to save.</param>
+    /// <exception cref="NotFoundException">No product has the id.</exception>
     public async Task UpdateProduct(Request.UpdateProduct request)
     {
         await updateProductValidator.ValidateAndThrowAsync(request);

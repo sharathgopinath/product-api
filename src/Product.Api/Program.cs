@@ -7,7 +7,6 @@ using Product.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add dependencies
-builder.Services.AddOpenApi();
 builder.RegisterAppServices();
 
 var app = builder.Build();
@@ -17,6 +16,8 @@ await app.Services.GetRequiredService<ProductRepository>().LoadAsync();
 
 app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -32,8 +33,3 @@ app.UseHttpsRedirection();
 app.MapProductEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
