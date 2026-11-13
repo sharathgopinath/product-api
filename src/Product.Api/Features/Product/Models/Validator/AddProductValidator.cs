@@ -6,6 +6,9 @@ public class AddProductValidator : AbstractValidator<Request.AddProduct>
 {
     public AddProductValidator()
     {
+        RuleFor(x => x.Id)
+            .GreaterThan(0);
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .MinimumLength(3);

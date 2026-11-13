@@ -2,6 +2,7 @@ using FluentValidation;
 using Product.Api.Features.Product;
 using Product.Api.Middleware;
 using Product.Api.Configuration;
+using Product.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ builder.Services.AddOpenApi();
 builder.RegisterAppServices();
 
 var app = builder.Build();
+
+// Hydrate the in-memory product store from the JSON data file
+await app.Services.GetRequiredService<ProductRepository>().LoadAsync();
 
 app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();

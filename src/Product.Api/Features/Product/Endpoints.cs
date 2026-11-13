@@ -9,13 +9,19 @@ public static class Endpoints
     {
         var group = app.MapGroup("product").WithTags("Product");
 
-        group.MapGet("list", async (ProductService productService) =>
-            TypedResults.Ok(await productService.GetProducts()));
+        group.MapGet("list", async ([AsParameters] Request.GetProducts request, ProductService productService) =>
+            TypedResults.Ok(await productService.GetProducts(request)));
+
+        group.MapGet("", async ([AsParameters] Request.GetProduct request, ProductService productService) =>
+            TypedResults.Ok(await productService.GetProduct(request)));
 
         group.MapPost("add", async (Request.AddProduct request, ProductService productService) =>
             TypedResults.Ok(await productService.AddProduct(request)));
 
         group.MapPost("update", async (Request.UpdateProduct request, ProductService productService) =>
-            await productService.UpdateProduct(request));
+        {
+            await productService.UpdateProduct(request);
+            return TypedResults.NoContent();
+        });
     }
 }

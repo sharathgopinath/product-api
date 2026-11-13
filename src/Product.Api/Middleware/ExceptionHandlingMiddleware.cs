@@ -55,6 +55,14 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                     extensions: extensions);
                 break;
 
+            case ConflictException conflictException:
+                logger.LogWarning("Conflict: {Message}", conflictException.Message);
+                result = Results.Problem(
+                    detail: conflictException.Message,
+                    statusCode: StatusCodes.Status409Conflict,
+                    extensions: extensions);
+                break;
+
             default:
                 logger.LogError(ex, "Unhandled exception");
                 result = Results.Problem(

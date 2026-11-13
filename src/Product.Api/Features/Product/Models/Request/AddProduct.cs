@@ -1,6 +1,7 @@
 namespace Product.Api.Features.Product.Models.Request;
 
 public record AddProduct(
+    int Id,
     string Title,
     string? Description,
     decimal Price,

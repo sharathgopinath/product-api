@@ -1,6 +1,11 @@
 @Product.Api_HostAddress = http://localhost:5043
 
-GET {{Product.Api_HostAddress}}/weatherforecast/
+GET {{Product.Api_HostAddress}}/product/list?pageSize=10&pageNumber=1
+Accept: application/json
+
+###
+
+GET {{Product.Api_HostAddress}}/product?id=1
 Accept: application/json
 
 ###
@@ -9,6 +14,7 @@ POST {{Product.Api_HostAddress}}/product/add
 Content-Type: application/json
 
 {
+  "id": 101,
   "title": "Sample product",
   "description": "A sample product",
   "price": 10.0,
@@ -30,6 +36,7 @@ POST {{Product.Api_HostAddress}}/product/update
 Content-Type: application/json
 
 {
+  "id": 2,
   "title": "Updated product",
   "description": "An updated product",
   "price": 12.5,
