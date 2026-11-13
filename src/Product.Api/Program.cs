@@ -11,6 +11,7 @@ builder.RegisterAppServices();
 
 var app = builder.Build();
 
+app.UseMiddleware<LoggingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
